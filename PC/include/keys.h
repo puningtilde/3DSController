@@ -37,6 +37,30 @@
 	}\
 } while(0)
 
+#define releaseKey(PCKey) do {\
+	if(!PCKey.useJoypad) {\
+		simulateKeyRelease(PCKey.virtualKey);\
+	}\
+	else if(PCKey.useJoypad == 1) {\
+		joyButtons &= ~PCKey.joypadButton;\
+	}\
+	else if(PCKey.useJoypad == 2) {\
+		joyButtons &= ~(PCKey.joypadButton << 8);\
+	}\
+} while(0)
+
+#define pressKey(PCKey) do {\
+	if(!PCKey.useJoypad) {\
+		simulateKeyNewpress(PCKey.virtualKey);\
+	}\
+	else if(PCKey.useJoypad == 1) {\
+		joyButtons |= PCKey.joypadButton;\
+	}\
+	else if(PCKey.useJoypad == 2) {\
+		joyButtons |= PCKey.joypadButton << 8;\
+	}\
+} while(0)
+
 #define BIT(n) (1 << (n))
 
 typedef enum {
@@ -54,6 +78,10 @@ typedef enum {
 	KEY_Y = BIT(11),
 	KEY_ZL = BIT(14), // (new 3DS only)
 	KEY_ZR = BIT(15), // (new 3DS only)
+	KEY_REG_TL = BIT(16),
+	KEY_REG_TR = BIT(17),
+	KEY_REG_BL = BIT(18),
+	KEY_REG_BR = BIT(19),
 	KEY_TOUCH = BIT(20), // Not actually provided by HID
 	KEY_CSTICK_RIGHT = BIT(24), // c-stick (new 3DS only)
 	KEY_CSTICK_LEFT = BIT(25), // c-stick (new 3DS only)
@@ -63,7 +91,7 @@ typedef enum {
 	KEY_CPAD_LEFT = BIT(29), // circle pad
 	KEY_CPAD_UP = BIT(30), // circle pad
 	KEY_CPAD_DOWN = BIT(31), // circle pad
-	
+
 	// Generic catch-all directions
 	KEY_UP = KEY_DUP | KEY_CPAD_UP,
 	KEY_DOWN = KEY_DDOWN | KEY_CPAD_DOWN,

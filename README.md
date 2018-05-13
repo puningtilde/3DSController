@@ -30,6 +30,10 @@ If using version 0.6 or above, up to 16 joystick buttons are available. If you w
 
 If using version 0.7 or above, the output vJoy device is configurable. To output to a device other than 1 it must first be enabled in vJoyConfig.
 
+If using version 0.8 or above, touchscreen includes a TAP mode to use the screen as an extra button and a REGIONS mode to map the screen to 4 buttons (see ini file for more details)
+
+Console Volume is mapped to the Z-axis and is not configurable.
+
 If using Ninjhax press Start and Select to return to the Homebrew Loader, otherwise you can just exit with the Home button.
 
 ### Configuration

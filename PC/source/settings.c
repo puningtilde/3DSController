@@ -32,30 +32,34 @@ struct settings defaultSettings = {
 	Start: { 1, {VK_RETURN} },
 	Select: { 1, {VK_BACK} },
 	Tap: { 1, {'T'} },
+	RegionLT: { 1, {'1'} },
+	RegionRT: { 1, {'2'} },
+	RegionLB: { 1, {'3'} },
+	RegionRB: { 1, {'4'} }
 };
 
 static bool getSetting(char *name, char *src, char *dest) {
 	char *start = strstr(src, name);
-	
+
 	if(start) {
 		start += strlen(name);
-		
+
 		char *end = start + strlen(start);
 		if(strstr(start, "\n") - 1 < end) end = strstr(start, "\n") - 1;
 		size_t size = (size_t)end - (size_t)start;
-		
+
 		strncpy(dest, start, size);
 		dest[size] = '\0';
-		
+
 		return true;
 	}
-	
+
 	return false;
 }
 
 static struct keyMapping getButton(char *string) {
 	struct keyMapping k = { 1, {0} };
-	
+
 	k.useJoypad = 0;
 	if(strcmp(string, "SPACE") == 0) k.virtualKey = VK_SPACE;
 	else if(strcmp(string, "CLICK") == 0) k.virtualKey = VK_LBUTTON;
@@ -75,7 +79,7 @@ static struct keyMapping getButton(char *string) {
 	else if(strcmp(string, "CONTROL") == 0) k.virtualKey = VK_CONTROL;
 	else if(strcmp(string, "ALT") == 0) k.virtualKey = VK_MENU;
 	else if(strcmp(string, "NONE") == 0) k.virtualKey = 0;
-	
+
 	else if(strcmp(string, "JOY1") == 0) { k.useJoypad = 1; k.joypadButton = 1 << 0; }
 	else if(strcmp(string, "JOY2") == 0) { k.useJoypad = 1; k.joypadButton = 1 << 1; }
 	else if(strcmp(string, "JOY3") == 0) { k.useJoypad = 1; k.joypadButton = 1 << 2; }
@@ -92,9 +96,9 @@ static struct keyMapping getButton(char *string) {
 	else if(strcmp(string, "JOY14") == 0) { k.useJoypad = 2; k.joypadButton = 1 << 5; }
 	else if(strcmp(string, "JOY15") == 0) { k.useJoypad = 2; k.joypadButton = 1 << 6; }
 	else if(strcmp(string, "JOY16") == 0) { k.useJoypad = 2; k.joypadButton = 1 << 7; }
-	
+
 	else k.virtualKey = (int)string[0];
-	
+
 	return k;
 }
 
@@ -102,69 +106,71 @@ bool readSettings(void) {
 	FILE *f;
 	size_t len = 0;
 	char *buffer = NULL;
-	
+
 	memcpy(&settings, &defaultSettings, sizeof(struct settings));
-	
+
 	f = fopen("3DSController.ini", "rb");
 	if(!f) {
 		return false;
 	}
-	
+
 	fseek(f, 0, SEEK_END);
 	len = ftell(f);
 	rewind(f);
-	
+
 	buffer = malloc(len);
 	if(!buffer) {
 		fclose(f);
 		return false;
 	}
-	
+
 	fread(buffer, 1, len, f);
-	
+
 	char setting[64] = { '\0' };
-	
+
 	if(getSetting("Port: ", buffer, setting)) {
 		sscanf(setting, "%d", &settings.port);
 	}
-	
+
 	if(getSetting("Throttle: ", buffer, setting)) {
 		sscanf(setting, "%d", &settings.throttle);
 	}
-	
+
 	if(getSetting("Circle Pad: ", buffer, setting)) {
 		if(strcmp(setting, "MOUSE") == 0) settings.circlePad = mouse;
 		else if(strcmp(setting, "JOYSTICK1") == 0) settings.circlePad = joystick1;
 		else if(strcmp(setting, "JOYSTICK2") == 0) settings.circlePad = joystick2;
 		else if(strcmp(setting, "KEYS") == 0) settings.circlePad = keys;
 	}
-	
+
 	if(getSetting("C Stick: ", buffer, setting)) {
 		if(strcmp(setting, "MOUSE") == 0) settings.cStick = mouse;
 		else if(strcmp(setting, "JOYSTICK1") == 0) settings.cStick = joystick1;
 		else if(strcmp(setting, "JOYSTICK2") == 0) settings.cStick = joystick2;
 		else if(strcmp(setting, "KEYS") == 0) settings.cStick = keys;
 	}
-	
+
 	if(getSetting("D Pad: ", buffer, setting)) {
 		if(strcmp(setting, "KEYS") == 0) settings.dPad = key;
 		if(strcmp(setting, "POV") == 0) settings.dPad = pov;
 	}
-	
+
 	if(getSetting("Touch: ", buffer, setting)) {
 		if(strcmp(setting, "MOUSE") == 0) settings.touch = mouse;
 		else if(strcmp(setting, "JOYSTICK1") == 0) settings.touch = joystick1;
 		else if(strcmp(setting, "JOYSTICK2") == 0) settings.touch = joystick2;
+		else if(strcmp(setting, "REGIONS") == 0) settings.touch = regions;
+		else if(strcmp(setting, "TAP") == 0) settings.touch = tap;
 	}
-	
+
 	if(getSetting("Mouse Speed: ", buffer, setting)) {
 		sscanf(setting, "%d", &settings.mouseSpeed);
 	}
-	
+
 	if(getSetting("vJoy Device: ", buffer, setting)) {
 		sscanf(setting, "%d", &settings.vJoyDevice);
 	}
-	
+
 	if(getSetting("A: ", buffer, setting)) settings.A = getButton(setting);
 	if(getSetting("B: ", buffer, setting)) settings.B = getButton(setting);
 	if(getSetting("X: ", buffer, setting)) settings.X = getButton(setting);
@@ -180,22 +186,29 @@ bool readSettings(void) {
 	if(getSetting("Start: ", buffer, setting)) settings.Start = getButton(setting);
 	if(getSetting("Select: ", buffer, setting)) settings.Select = getButton(setting);
 	if(getSetting("Tap: ", buffer, setting)) settings.Tap = getButton(setting);
-	
+
 	if(settings.circlePad == keys) {
 		if(getSetting("Pad Left: ", buffer, setting)) settings.PadLeft = getButton(setting);
 		if(getSetting("Pad Right: ", buffer, setting)) settings.PadRight = getButton(setting);
 		if(getSetting("Pad Up: ", buffer, setting)) settings.PadUp = getButton(setting);
 		if(getSetting("Pad Down: ", buffer, setting)) settings.PadDown = getButton(setting);
 	}
-	
+
 	if(settings.cStick == keys) {
 		if(getSetting("C Stick Left: ", buffer, setting)) settings.CSLeft = getButton(setting);
 		if(getSetting("C Stick Right: ", buffer, setting)) settings.CSRight = getButton(setting);
 		if(getSetting("C Stick Up: ", buffer, setting)) settings.CSUp = getButton(setting);
 		if(getSetting("C Stick Down: ", buffer, setting)) settings.CSDown = getButton(setting);
 	}
-	
+
+	if(settings.touch == regions){
+		if(getSetting("RegionRT: ", buffer, setting)) settings.RegionRT = getButton(setting);
+		if(getSetting("RegionLT: ", buffer, setting)) settings.RegionLT = getButton(setting);
+		if(getSetting("RegionRB: ", buffer, setting)) settings.RegionRB = getButton(setting);
+		if(getSetting("RegionLB: ", buffer, setting)) settings.RegionLB = getButton(setting);
+	}
+
 	fclose(f);
-	
+
 	return true;
 }

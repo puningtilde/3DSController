@@ -10,7 +10,7 @@ Copyright (c) Shaul Eizikovich.  All rights reserved.
 Module Name:
 
     public.h
-    
+
 Abstract:
 
     Public header file for the vJoy project
@@ -41,7 +41,7 @@ Revision History:
 #include "PPJIoctl.h"
 #endif
 
-#include <INITGUID.H>	// Definitions for controlling GUID initialization
+#include <initguid.h>	// Definitions for controlling GUID initialization
 
 //
 // Usage example:
@@ -201,7 +201,7 @@ typedef struct _JOYSTICK_POSITION_V2
 	DWORD	bHatsEx1;	// Lower 4 bits: HAT switch or 16-bit of continuous HAT switch
 	DWORD	bHatsEx2;	// Lower 4 bits: HAT switch or 16-bit of continuous HAT switch
 	DWORD	bHatsEx3;	// Lower 4 bits: HAT switch or 16-bit of continuous HAT switch LONG lButtonsEx1; // Buttons 33-64
-	
+
 	/// JOYSTICK_POSITION_V2 Extenssion
 	LONG lButtonsEx1; // Buttons 33-64
 	LONG lButtonsEx2; // Buttons 65-96
@@ -223,5 +223,3 @@ typedef struct _JOYSTICK_POSITION_V2
 
 
 #endif
-
-
