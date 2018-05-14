@@ -2,6 +2,8 @@
 
 #include "general.h"
 
+#include <math.h>
+
 void error(const char *functionName) {
 	char errorMsg[92];
 	ZeroMemory(errorMsg, 92);
@@ -27,4 +29,26 @@ int clamp	(int val, int min, int max) {
 	}
 
 	return val;
+}
+
+int applyDeadZoneX(int valX, int valY, double deadZone){
+	double cap = 164 * deadZone;
+	double module = sqrt(pow(valX,2)+pow(valY,2));
+
+	if (module < cap) {
+		return 0;
+	} else {
+		return valX;
+	}
+}
+
+int applyDeadZoneY(int valX, int valY, double deadZone){
+	double cap = 164 * deadZone;
+	double module = sqrt(pow(valX,2)+pow(valY,2));
+
+	if (module < cap) {
+		return 0;
+	} else {
+		return valY;
+	}
 }

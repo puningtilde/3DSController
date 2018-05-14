@@ -252,13 +252,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 					SetCursorPos(p.x + (circlePad.x * settings.mouseSpeed) / 32, p.y - (circlePad.y * settings.mouseSpeed) / 32);
 				}
 				else if(settings.circlePad == joystick1) {
-					joyX = clamp((circlePad.x + 128) * 128, settings.deadZone1*32767, 32767);
-					joyY = clamp((128 - circlePad.y) * 128, settings.deadZone1*32767, 32767);
+					//printf("\rCirclePad: %d, %d\t\t", circlePad.x, circlePad.y);
+					joyX = clamp((applyDeadZoneX(circlePad.x, circlePad.y, settings.deadZone1) + 128) * 128, 0, 32767);
+					joyY = clamp((128 - applyDeadZoneY(circlePad.x, circlePad.y, settings.deadZone1)) * 128, 0, 32767);
 				}
 
 				else if(settings.circlePad == joystick2) {
-					joyRX = clamp((circlePad.x + 128) * 128, settings.deadZone2*32767, 32767);
-					joyRY = clamp((128 - circlePad.y) * 128, settings.deadZone2*32767, 32767);
+					joyRX = clamp((applyDeadZoneX(circlePad.x, circlePad.y, settings.deadZone2) + 128) * 128, 0, 32767);
+					joyRY = clamp((128 - applyDeadZoneX(circlePad.x, circlePad.y, settings.deadZone2)) * 128, 0, 32767);
 				}
 
 				if(settings.cStick == mouse) {
@@ -271,13 +272,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 				}
 
 				else if(settings.cStick == joystick1) {
-					joyX = clamp((cStick.x + 128) * 128, settings.deadZone1*32767, 32767);
-					joyY = clamp((128 - cStick.y) * 128, settings.deadZone1*32767, 32767);
+					joyX = clamp((applyDeadZoneX(cStick.x, cStick.y, settings.deadZone1) + 128) * 128, 0, 32767);
+					joyY = clamp((128 - applyDeadZoneY(cStick.x, cStick.y, settings.deadZone1)) * 128, 0, 32767);
 				}
 
 				else if(settings.cStick == joystick2) {
-					joyRX = clamp((cStick.x + 128) * 128, settings.deadZone2*32767, 32767);
-					joyRY = clamp((128 - cStick.y) * 128, settings.deadZone2*32767, 32767);
+					joyRX = clamp((applyDeadZoneX(cStick.x, cStick.y, settings.deadZone2) + 128) * 128, 0, 32767);
+					joyRY = clamp((128 - applyDeadZoneY(cStick.x, cStick.y, settings.deadZone2)) * 128, 0, 32767);
 				}
 
 
