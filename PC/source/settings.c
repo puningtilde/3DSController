@@ -17,6 +17,8 @@ struct settings defaultSettings = {
 	touch: mouse,
 	mouseSpeed: 4,
 	vJoyDevice: 1,
+	deadZone1: 0,
+	deadZone2: 0,
 	A: { 1, {'A'} },
 	B: { 1, {'B'} },
 	X: { 1, {'X'} },
@@ -171,6 +173,14 @@ bool readSettings(void) {
 		sscanf(setting, "%d", &settings.vJoyDevice);
 	}
 
+	if(getSetting("Dead Zone 1: ", buffer, setting)){
+		sscanf(setting, "%lf", &settings.deadZone1);
+	}
+
+	if(getSetting("Dead Zone 2: ", buffer, setting)){
+		sscanf(setting, "%lf", &settings.deadZone2);
+	}
+
 	if(getSetting("A: ", buffer, setting)) settings.A = getButton(setting);
 	if(getSetting("B: ", buffer, setting)) settings.B = getButton(setting);
 	if(getSetting("X: ", buffer, setting)) settings.X = getButton(setting);
@@ -202,10 +212,10 @@ bool readSettings(void) {
 	}
 
 	if(settings.touch == regions){
-		if(getSetting("RegionRT: ", buffer, setting)) settings.RegionRT = getButton(setting);
-		if(getSetting("RegionLT: ", buffer, setting)) settings.RegionLT = getButton(setting);
-		if(getSetting("RegionRB: ", buffer, setting)) settings.RegionRB = getButton(setting);
-		if(getSetting("RegionLB: ", buffer, setting)) settings.RegionLB = getButton(setting);
+		if(getSetting("Region RT: ", buffer, setting)) settings.RegionRT = getButton(setting);
+		if(getSetting("Region LT: ", buffer, setting)) settings.RegionLT = getButton(setting);
+		if(getSetting("Region RB: ", buffer, setting)) settings.RegionRB = getButton(setting);
+		if(getSetting("Region LB: ", buffer, setting)) settings.RegionLB = getButton(setting);
 	}
 
 	fclose(f);

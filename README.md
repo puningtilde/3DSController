@@ -32,6 +32,8 @@ If using version 0.7 or above, the output vJoy device is configurable. To output
 
 If using version 0.8 or above, touchscreen includes a TAP mode to use the screen as an extra button and a REGIONS mode to map the screen to 4 buttons (see ini file for more details)
 
+With version 0.8b deadzone values for both joysticks when using CirclePad or CStick were added, 0.0 is no deadzone and 1.0 is full deadzone, ajust at will.
+
 Console Volume is mapped to the Z-axis and is not configurable.
 
 If using Ninjhax press Start and Select to return to the Homebrew Loader, otherwise you can just exit with the Home button.
