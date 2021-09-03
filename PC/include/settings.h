@@ -27,6 +27,7 @@ struct settings {
 	enum analogue touch;
 	enum dPad dPad;
 	int mouseSpeed;
+	int mouseMode;
 	double deadZone1;
 	double deadZone2;
 	UINT vJoyDevice;
