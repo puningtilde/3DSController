@@ -179,9 +179,20 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 					}
 					else if(settings.touch == mouse) {
 						if(settings.mouseSpeed) {
-							POINT p;
-							GetCursorPos(&p);
-							SetCursorPos(p.x + (currentTouch.x - lastTouch.x) * settings.mouseSpeed, p.y + (currentTouch.y - lastTouch.y) * settings.mouseSpeed);
+							if(settings.mouseMode) {
+								INPUT input;
+								input.type = INPUT_MOUSE;
+								input.mi.mouseData = 0;
+								input.mi.dx = ((currentTouch.x - lastTouch.x) * settings.mouseSpeed);
+								input.mi.dy = ((currentTouch.y - lastTouch.y) * settings.mouseSpeed);
+								input.mi.dwFlags = MOUSEEVENTF_MOVE;
+								SendInput(1, &input, sizeof(input));
+							}
+							else {
+								POINT p;
+								GetCursorPos(&p);
+								SetCursorPos(p.x + (currentTouch.x - lastTouch.x - 0) * settings.mouseSpeed, p.y + (currentTouch.y - lastTouch.y) * settings.mouseSpeed);
+							}
 						}
 						else {
 							SetCursorPos((int)((double)currentTouch.x * widthMultiplier), (int)((double)currentTouch.y * heightMultiplier));
