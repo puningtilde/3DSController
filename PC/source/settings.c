@@ -15,6 +15,7 @@ struct settings defaultSettings = {
 	circlePad: joystick1,
 	cStick: joystick2,
 	touch: mouse,
+	mouseMode: 0,
 	mouseSpeed: 4,
 	vJoyDevice: 1,
 	deadZone1: 0,
@@ -167,6 +168,10 @@ bool readSettings(void) {
 
 	if(getSetting("Mouse Speed: ", buffer, setting)) {
 		sscanf(setting, "%d", &settings.mouseSpeed);
+	}
+	
+	if(getSetting("Mouse Mode: ", buffer, setting)) {
+		sscanf(setting, "%d", &settings.mouseMode);
 	}
 
 	if(getSetting("vJoy Device: ", buffer, setting)) {
