@@ -1,3 +1,9 @@
+This is a fork of 3dsController I'm making that makes the 3ds's touchscreen map to the bottom half of the pc monitor instead of the whole thing.
+This allows for a very specific use case which is using your 3ds as a (mostly) accurate controller for emulating ds games using retroarch's melonds ds core with megabezel shaders.
+I may update this in the future to have a customizable area on the monitor chosen, but for now it's just this.
+Otherwise I recommend this version of 3DSController: https://github.com/ksymph/3DSController/releases/tag/0.8b
+(which is the one this is forked from.)
+
 3DSController ![](/3DS/cxi/icon48x48.png?raw=true)
 ===
 A 3DS homebrew application which allows you to use your 3DS as a wireless controller for Windows.
